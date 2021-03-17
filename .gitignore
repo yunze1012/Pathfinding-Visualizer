@@ -341,3 +341,4 @@ healthchecksdb
 
 # Visual Studio settings
 Pathfinding-Visualizer/*.vcxproj
+Pathfinding-Visualizer/*.filters
