@@ -6,7 +6,7 @@
 
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "Pathfinder Visualizer V0.1");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Pathfinder Visualizer V0.0");
 
     while (window.isOpen())
     {
