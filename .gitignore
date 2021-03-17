@@ -340,4 +340,4 @@ ASALocalRun/
 healthchecksdb
 
 # Visual Studio settings
-*.vcxproj
+Pathfinding-Visualizer/*.vcxproj
