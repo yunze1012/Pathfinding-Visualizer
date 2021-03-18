@@ -4,3 +4,14 @@ void Square::setWall()
 {
 	wall = true;
 }
+
+void Square::setPath()
+{
+	path = true;
+}
+
+void Square::reset()
+{
+	wall = false;
+	path = false;
+}

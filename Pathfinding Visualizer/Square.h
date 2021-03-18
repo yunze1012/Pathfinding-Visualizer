@@ -3,10 +3,13 @@
 
 class Square
 {
-	bool wall; 
+	bool wall = false; 
+	bool path = false;
 
  public:
 	void setWall();
+	void setPath();
+	void reset();
 
 	
 };

@@ -12,7 +12,13 @@ class Graph
 	vector<vector<shared_ptr<Square>>> graph;
 
 public:
+	Graph();
+	Graph(int dimension);
 	void setWall(int x, int y);
+	void setPath(int x, int y);
+
+	// reset the graph to initial state
+	void init();
 };
 
 #endif
