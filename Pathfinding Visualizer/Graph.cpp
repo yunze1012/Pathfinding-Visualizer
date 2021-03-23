@@ -6,7 +6,7 @@ Graph::Graph()
 	for (int i = 0; i < dimension; i++) {
 		vector<shared_ptr<Square>> squares;
 		for (int j = 0; j < dimension; j++) {
-			shared_ptr<Square> square = make_shared<Square>();
+			shared_ptr<Square> square = make_shared<Square>(i, j);
 			squares.push_back(square);
 		}
 		graph.push_back(squares);
@@ -19,7 +19,7 @@ Graph::Graph(int dimension)
 	for (int i = 0; i < dimension; i++) {
 		vector<shared_ptr<Square>> squares;
 		for (int j = 0; j < dimension; j++) {
-			shared_ptr<Square> square = make_shared<Square>();
+			shared_ptr<Square> square = make_shared<Square>(i, j);
 			squares.push_back(square);
 		}
 		graph.push_back(squares);

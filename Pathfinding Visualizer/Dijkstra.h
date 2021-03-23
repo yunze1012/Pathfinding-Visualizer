@@ -1,21 +1,28 @@
 #ifndef _DIJKSTRA_H_
 #define _DIJKSTRA_H_
 
+#include <climits>
+#include <iostream>
 #include <utility>
+#include <queue>
 #include "Graph.h"
 
+using namespace std;
 
 class Dijkstra
 {
 	shared_ptr<Graph> graph;
-	vector<vector<int>> visited;
+	priority_queue <shared_ptr<Square>, vector<shared_ptr<Square>>, greater<shared_ptr<Square>>> unvisitedSquares;
+	void resortUnvisitedSquares();
+	vector<shared_ptr<Square>> getUnvisitedNeighbors(shared_ptr<Square> s);
+	void updateUnvisitedNeighbors(shared_ptr<Square> s);
 	
+public:
 	Dijkstra(shared_ptr<Graph> graph);
 
-	// computes the minimum distance starting from position x, y and add the destination square in visitedSquares.
-	int minimumDistance(int x, int y);
-
-	void run(pair<int, int> start, pair<int, int> end);
+	void run(shared_ptr<Square> start, shared_ptr<Square> end);
+	
+	
 };
 
 #endif
