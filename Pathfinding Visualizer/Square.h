@@ -11,6 +11,8 @@ class Square
 	void setPath();
 	void reset();
 
+	bool isWall();
+
 	
 };
 

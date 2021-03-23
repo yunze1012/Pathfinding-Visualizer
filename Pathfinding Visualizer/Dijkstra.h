@@ -7,10 +7,13 @@
 
 class Dijkstra
 {
-	Graph * graph;
-	vector<Square*> visitedSquares;
+	shared_ptr<Graph> graph;
+	vector<vector<int>> visited;
 	
 	Dijkstra(shared_ptr<Graph> graph);
+
+	// computes the minimum distance starting from position x, y and add the destination square in visitedSquares.
+	int minimumDistance(int x, int y);
 
 	void run(pair<int, int> start, pair<int, int> end);
 };
