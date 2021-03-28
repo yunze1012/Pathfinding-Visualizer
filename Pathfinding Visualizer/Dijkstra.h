@@ -13,16 +13,13 @@ class Dijkstra
 {
 	shared_ptr<Graph> graph;
 	priority_queue <shared_ptr<Square>, vector<shared_ptr<Square>>, greater<shared_ptr<Square>>> unvisitedSquares;
-	void resortUnvisitedSquares();
 	vector<shared_ptr<Square>> getUnvisitedNeighbors(shared_ptr<Square> s);
+	void resortUnvisitedSquares();
 	void updateUnvisitedNeighbors(shared_ptr<Square> s);
 	
 public:
 	Dijkstra(shared_ptr<Graph> graph);
-
-	void run(shared_ptr<Square> start, shared_ptr<Square> end);
-	
-	
+	void run(shared_ptr<Square> start, shared_ptr<Square> end);	
 };
 
 #endif
