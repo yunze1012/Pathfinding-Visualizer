@@ -46,14 +46,6 @@ int Graph::getDimension()
 	return dimension;
 }
 
-int Graph::getDistance(pair<int, int> start, pair<int, int> dest)
-{
-	if (abs(start.first - dest.first) > 1 || abs(start.second - dest.second) > 1 || graph[dest.first][dest.second]->isWall()) {
-		return int(INFINITY);
-	}
-	return 1;
-}
-
 void Graph::init()
 {
 	for (vector<shared_ptr<Square>> squares : graph) {
