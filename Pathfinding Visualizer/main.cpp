@@ -3,6 +3,7 @@
 #include "Display.h"
 
 #include <SFML/Graphics.hpp>
+#include <TGUI/TGUI.hpp>
 #include <iostream>
 #include <memory>
 #include <windows.h>
@@ -18,7 +19,8 @@ int main(int argc, char **argv) {
     d.run(g->getSquare(0, 0), g->getSquare(1, 2));
     d.print(g->getSquare(0, 0), g->getSquare(1, 2));
 
-    /*sf::RenderWindow window(sf::VideoMode(1280, 720), "Pathfinder Visualizer V0.0");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Pathfinder Visualizer V0.0");
+    tgui::GuiSFML gui{ window };
 
     while (window.isOpen())
     {
@@ -32,8 +34,9 @@ int main(int argc, char **argv) {
         }
 
         window.clear();
+        gui.draw();
         window.display();
-    }*/
+    }
 
     /*priority_queue <shared_ptr<Square>, vector<shared_ptr<Square>>, greater<shared_ptr<Square>>> unvisitedNodes;
     shared_ptr<Square> two = make_shared<Square>(0, 0);
