@@ -21,7 +21,11 @@ int main(int argc, char **argv) {
 
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Pathfinder Visualizer V0.0");
     tgui::GuiSFML gui{ window };
+    tgui::Button::Ptr button = tgui::Button::create();
+    button->setPosition(50, 50);
+    button->setSize(200, 50);
 
+    gui.add(button);
     while (window.isOpen())
     {
         sf::Event event;
