@@ -3,8 +3,8 @@
 
 #include <climits>
 #include <iostream>
-#include <utility>
 #include <queue>
+#include <utility>
 #include "Graph.h"
 
 using namespace std;
@@ -19,7 +19,8 @@ class Dijkstra
 	
 public:
 	Dijkstra(shared_ptr<Graph> graph);
-	void run(shared_ptr<Square> start, shared_ptr<Square> end);	
+	void run(shared_ptr<Square> start, shared_ptr<Square> end);
+	void print(shared_ptr<Square> start, shared_ptr<Square> end);
 };
 
 #endif

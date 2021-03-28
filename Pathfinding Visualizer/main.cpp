@@ -15,8 +15,8 @@ int main(int argc, char **argv) {
     Dijkstra d(g);
     g->getSquare(1, 0)->setWall();
     g->getSquare(1, 1)->setWall();
-    g->getSquare(0, 1)->setWall();
     d.run(g->getSquare(0, 0), g->getSquare(1, 2));
+    d.print(g->getSquare(0, 0), g->getSquare(1, 2));
 
     /*sf::RenderWindow window(sf::VideoMode(1280, 720), "Pathfinder Visualizer V0.0");
 
