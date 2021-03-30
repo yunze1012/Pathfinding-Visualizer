@@ -36,6 +36,11 @@ void Graph::setPath(int x, int y)
 	graph[x][y].get()->setPath();
 }
 
+void Graph::setDimension(int dim)
+{
+	this->dimension = dim;
+}
+
 shared_ptr<Square> Graph::getSquare(int x, int y)
 {
 	return graph[x][y];

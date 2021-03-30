@@ -12,6 +12,7 @@ class Display
 	shared_ptr<Graph> g;
 	shared_ptr<sf::RenderWindow> window;
 	shared_ptr<tgui::GuiSFML> gui;
+	shared_ptr<tgui::Canvas> canvas;
 
 public:
 	Display(shared_ptr<Graph> g);
@@ -19,6 +20,8 @@ public:
 	void init();
 
 	void draw();
+
+	void render();
 
 
 };

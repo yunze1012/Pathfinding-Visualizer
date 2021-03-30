@@ -18,6 +18,7 @@ public:
 	Graph(int dimension);
 	void setWall(int x, int y);
 	void setPath(int x, int y);
+	void setDimension(int dim);
 	shared_ptr<Square> getSquare(int x, int y);
 	int getDimension();
 
