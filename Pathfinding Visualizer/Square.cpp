@@ -35,6 +35,8 @@ void Square::reset()
 	wall = false;
 	path = false;
 	visited = false;
+	distance = INT_MAX;
+	previousSquare = nullptr;
 }
 
 bool Square::isWall()

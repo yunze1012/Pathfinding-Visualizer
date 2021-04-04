@@ -23,6 +23,7 @@ public:
 	// void setWall(int x, int y);
 	void setStart(int x, int y);
 	void setEnd(int x, int y);
+	void reset();
 	shared_ptr<Square> getSquare(int x, int y);
 	shared_ptr<Square> getStart();
 	shared_ptr<Square> getEnd();

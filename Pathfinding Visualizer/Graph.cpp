@@ -41,6 +41,19 @@ void Graph::setDimension(int dim)
 	this->dimension = dim;
 }
 
+void Graph::reset() 
+{
+	for (vector<shared_ptr<Square>> line : graph) 
+	{
+		for (shared_ptr<Square> square : line) 
+		{
+			square->reset();
+		}
+	}
+	start = nullptr;
+	end = nullptr;
+}
+
 shared_ptr<Square> Graph::getSquare(int x, int y)
 {
 	return graph[x][y];

@@ -18,6 +18,7 @@ class Display
 	void editStart();
 	void editEnd();
 	void editWall();
+	void reset();
 	shared_ptr<Square> getSquareOnMousePos();
 
 public:

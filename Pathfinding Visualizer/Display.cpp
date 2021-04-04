@@ -29,6 +29,13 @@ void Display::init()
     runButton->setText("Run");
     gui->add(runButton, "run");
 
+    tgui::Button::Ptr resetButton = tgui::Button::create();
+    resetButton->setPosition(1000, 700);
+    resetButton->setSize(150, 50);
+    resetButton->setText("Reset");
+    resetButton->onPress([&] { g->reset(); draw(); });
+    gui->add(resetButton, "reset");
+
     tgui::RadioButton::Ptr editStartOption = tgui::RadioButton::create();
     editStartOption->setPosition(1000, 100);
     editStartOption->tgui::RadioButton::setText("Edit Start");
@@ -74,90 +81,81 @@ shared_ptr<Square> Display::getSquareOnMousePos()
 
 void Display::editStart()
 {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
+    shared_ptr<Square> squareObj = getSquareOnMousePos();
+    if (squareObj != nullptr)
     {
-        shared_ptr<Square> squareObj = getSquareOnMousePos();
-        if (squareObj != nullptr)
-        {            
-            if (squareObj != g->getEnd() && !squareObj->isWall()) 
+        if (squareObj != g->getEnd() && !squareObj->isWall())
+        {
+            // delete old start:
+            shared_ptr<Square> startSquare = g->getStart();
+            if (startSquare != nullptr)
             {
-                // delete old start:
-                shared_ptr<Square> startSquare = g->getStart();
-                if (startSquare != nullptr)
-                {
-                    drawSquare((squareDim * startSquare->getX()) + 35,
-                        (squareDim * startSquare->getY()) + 15,
-                        squareDim - 1, 
-                        sf::Color(255, 255, 255));
-                }
-
-                // drawing:
-                drawSquare((squareDim * squareObj->getX()) + 35,
-                    (squareDim * squareObj->getY()) + 15,
-                    squareDim - 1, 
-                    sf::Color(135, 206, 235));
-                g->setStart(squareObj->getX(), squareObj->getY());
+                drawSquare((squareDim * startSquare->getX()) + 35,
+                    (squareDim * startSquare->getY()) + 15,
+                    squareDim - 1,
+                    sf::Color(255, 255, 255));
             }
+
+            // drawing:
+            drawSquare((squareDim * squareObj->getX()) + 35,
+                (squareDim * squareObj->getY()) + 15,
+                squareDim - 1,
+                sf::Color(135, 206, 235));
+            g->setStart(squareObj->getX(), squareObj->getY());
         }
     }
 }
 
 void Display::editEnd() 
 {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    shared_ptr<Square> squareObj = getSquareOnMousePos();
+    if (squareObj != nullptr)
     {
-        shared_ptr<Square> squareObj = getSquareOnMousePos();
-        if (squareObj != nullptr)
+        if (squareObj != g->getStart() && !squareObj->isWall())
         {
-            if (squareObj != g->getStart() && !squareObj->isWall())
+            // delete old end:
+            shared_ptr<Square> endSquare = g->getEnd();
+            if (endSquare != nullptr)
             {
-                // delete old end:
-                shared_ptr<Square> endSquare = g->getEnd();
-                if (endSquare != nullptr)
-                {
-                    drawSquare((squareDim * endSquare->getX()) + 35,
-                        (squareDim * endSquare->getY()) + 15,
-                        squareDim - 1,
-                        sf::Color(255, 255, 255));
-                }
-
-                // drawing:
-                drawSquare((squareDim * squareObj->getX()) + 35,
-                    (squareDim * squareObj->getY()) + 15,
+                drawSquare((squareDim * endSquare->getX()) + 35,
+                    (squareDim * endSquare->getY()) + 15,
                     squareDim - 1,
-                    sf::Color(255, 204, 203));
-                g->setEnd(squareObj->getX(), squareObj->getY());
+                    sf::Color(255, 255, 255));
             }
+
+            // drawing:
+            drawSquare((squareDim * squareObj->getX()) + 35,
+                (squareDim * squareObj->getY()) + 15,
+                squareDim - 1,
+                sf::Color(255, 204, 203));
+            g->setEnd(squareObj->getX(), squareObj->getY());
         }
     }
 }
 
 void Display::editWall() 
 {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    shared_ptr<Square> squareObj = getSquareOnMousePos();
+    if (squareObj != nullptr)
     {
-        shared_ptr<Square> squareObj = getSquareOnMousePos();
-        if (squareObj != nullptr)
+        if (squareObj != g->getStart() && squareObj != g->getEnd())
         {
-            if (squareObj != g->getStart() && squareObj != g->getEnd())
+            if (squareObj->isWall())
             {
-                if (squareObj->isWall()) 
-                {
-                    drawSquare((squareDim * squareObj->getX()) + 35,
-                        (squareDim * squareObj->getY()) + 15,
-                        squareDim - 1,
-                        sf::Color(255, 255, 255));
-        
-                }
-                else 
-                {
-                    drawSquare((squareDim * squareObj->getX()) + 35,
-                        (squareDim * squareObj->getY()) + 15,
-                        squareDim - 1,
-                        sf::Color(192, 192, 192));
-                }
-                squareObj->changeWall();
+                drawSquare((squareDim * squareObj->getX()) + 35,
+                    (squareDim * squareObj->getY()) + 15,
+                    squareDim - 1,
+                    sf::Color(255, 255, 255));
+
             }
+            else
+            {
+                drawSquare((squareDim * squareObj->getX()) + 35,
+                    (squareDim * squareObj->getY()) + 15,
+                    squareDim - 1,
+                    sf::Color(192, 192, 192));
+            }
+            squareObj->changeWall();
         }
     }
 }
@@ -171,16 +169,18 @@ void Display::draw()
             sf::RectangleShape square;
             if (j == g->getDimension() - 1 || i == g->getDimension() - 1) 
             {
-                square.setSize(sf::Vector2f(squareDim - 1, squareDim - 1));
+                drawSquare((squareDim * j) + 35,
+                           (squareDim * i) + 15,
+                           squareDim - 1,
+                           sf::Color(255, 255, 255));
             }
             else 
             {
-                square.setSize(sf::Vector2f(squareDim, squareDim));
+                drawSquare((squareDim * j) + 35,
+                           (squareDim * i) + 15,
+                            squareDim,
+                            sf::Color(255, 255, 255));
             }
-            square.setOutlineColor(sf::Color(192, 192, 192));
-            square.setOutlineThickness(1);
-            square.setPosition((squareDim * j) + 35, (squareDim * i) + 15);
-            canvas->draw(square);
         }
 	}
 }
@@ -195,29 +195,22 @@ void Display::render()
             gui->handleEvent(event);
 
             if (event.type == sf::Event::Closed)
+            {
                 window->close();
+            }
+            else if (event.type == sf::Event::MouseButtonReleased)
+            {
+                if (gui->get<tgui::RadioButton>("editStart")->isChecked())
+                    editStart();
+                else if (gui->get<tgui::RadioButton>("editWall")->isChecked())
+                    editWall();
+                else if (gui->get<tgui::RadioButton>("editEnd")->isChecked())
+                    editEnd();
+            }
         }
-
         window->clear(sf::Color(255, 255, 255));
         gui->draw();
         canvas->display();
         window->display();
-
-        if (gui->get<tgui::RadioButton>("editStart")->isChecked()) 
-        {
-            
-            editStart();
-        }
-        else if (gui->get<tgui::RadioButton>("editEnd")->isChecked())
-        {
-            editEnd();
-            
-        }
-        else if (gui->get<tgui::RadioButton>("editWall")->isChecked())
-        {
-            editWall();
-            
-        }
     }
 }
-
