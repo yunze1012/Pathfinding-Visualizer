@@ -23,7 +23,7 @@ class Square
 	shared_ptr<Square> getPreviousSquare();
 
 	void setDistance(int distance);
-	void setWall();
+	void changeWall();
 	void setPath();
 	void setVisited();
 	void reset();
@@ -34,12 +34,14 @@ class Square
 };
 
 inline
-bool operator<(const shared_ptr<Square> lhs, const shared_ptr<Square> rhs) {
+bool operator<(const shared_ptr<Square> lhs, const shared_ptr<Square> rhs) 
+{
 	return lhs->getDistance() < rhs->getDistance();
 }
 
 inline
-bool operator>(const shared_ptr<Square> lhs, const shared_ptr<Square> rhs) {
+bool operator>(const shared_ptr<Square> lhs, const shared_ptr<Square> rhs) 
+{
 	return lhs->getDistance() > rhs->getDistance();
 }
 

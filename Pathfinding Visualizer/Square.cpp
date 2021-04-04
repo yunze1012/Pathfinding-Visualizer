@@ -1,9 +1,9 @@
 #include "Square.h"
 
 
-void Square::setWall()
+void Square::changeWall()
 {
-	wall = true;
+	wall = !wall;
 }
 
 int Square::getDistance()

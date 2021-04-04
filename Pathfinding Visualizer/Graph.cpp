@@ -26,10 +26,10 @@ Graph::Graph(int dimension)
 	}
 }
 
-void Graph::setWall(int x, int y)
+/* void Graph::setWall(int x, int y)
 {
 	graph[x][y]->setWall();
-}
+} */
 
 void Graph::setPath(int x, int y)
 {
@@ -58,4 +58,24 @@ void Graph::init()
 			square.get()->reset();
 		}
 	}
+}
+
+void Graph::setStart(int x, int y)
+{
+	this->start = graph[x][y];
+}
+
+void Graph::setEnd(int x, int y)
+{
+	this->end = graph[x][y];
+}
+
+shared_ptr<Square> Graph::getStart()
+{
+	return start;
+}
+
+shared_ptr<Square> Graph::getEnd()
+{
+	return end;
 }
