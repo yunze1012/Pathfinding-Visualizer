@@ -16,9 +16,11 @@ Graph::Graph()
 Graph::Graph(int dimension)
 {
 	this->dimension = dimension;
-	for (int i = 0; i < dimension; i++) {
+	for (int i = 0; i < dimension; i++) 
+	{
 		vector<shared_ptr<Square>> squares;
-		for (int j = 0; j < dimension; j++) {
+		for (int j = 0; j < dimension; j++) 
+		{
 			shared_ptr<Square> square = make_shared<Square>(i, j);
 			squares.push_back(square);
 		}
@@ -52,6 +54,7 @@ void Graph::reset()
 	}
 	start = nullptr;
 	end = nullptr;
+	locked = false;
 }
 
 shared_ptr<Square> Graph::getSquare(int x, int y)
@@ -91,4 +94,12 @@ shared_ptr<Square> Graph::getStart()
 shared_ptr<Square> Graph::getEnd()
 {
 	return end;
+}
+
+void Graph::lock() {
+	locked = true;
+}
+
+bool Graph::isLocked() {
+	return locked;
 }

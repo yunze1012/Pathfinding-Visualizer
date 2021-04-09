@@ -1,19 +1,19 @@
 #include "Display.h"
 
-Display::Display(shared_ptr<Graph> g, shared_ptr<Runner> runner) 
-    : g(g), runner(runner)
+Display::Display(shared_ptr<Graph> graph, shared_ptr<Runner> runner) 
+    : graph(graph), runner(runner)
 {
     window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 900), "Pathfinder Visualizer V0.1", sf::Style::Titlebar | sf::Style::Close);
     gui = make_shared<tgui::GuiSFML>(*window);
     canvas = tgui::Canvas::create();
     gui->add(canvas);
     // squareDim = 35;
-    squareDim = 899 / g->getDimension();
-    for (int i = 0; i < g->getDimension(); i++)
+    squareDim = 899 / graph->getDimension();
+    for (int i = 0; i < graph->getDimension(); i++)
     {
-        for (int j = 0; j < g->getDimension(); j++) 
+        for (int j = 0; j < graph->getDimension(); j++) 
         {
-            g->getSquare(i, j)->attach(make_shared<Display>(*this));
+            graph->getSquare(i, j)->attach(make_shared<Display>(*this));
         }
     }
 }
@@ -34,14 +34,14 @@ void Display::init()
     runButton->setPosition(1000, 800);
     runButton->setSize(150, 50);
     runButton->setText("Run");
-    runButton->onPress([&] {runner->run(Option::DIJKSTRA);  });
+    runButton->onPress([&] { run(); });
     gui->add(runButton, "run");
 
     tgui::Button::Ptr resetButton = tgui::Button::create();
     resetButton->setPosition(1000, 700);
     resetButton->setSize(150, 50);
     resetButton->setText("Reset");
-    resetButton->onPress([&] { g->reset(); draw(); });
+    resetButton->onPress([&] { reset(); });
     gui->add(resetButton, "reset");
 
     tgui::RadioButton::Ptr editStartOption = tgui::RadioButton::create();
@@ -61,6 +61,30 @@ void Display::init()
     gui->add(editWallOption, "editWall");
 }
 
+void Display::reset()
+{
+    graph->reset();
+    draw();
+}
+
+void Display::run() 
+{
+    if (graph->isLocked()) return;
+    
+    if (graph->getStart() == nullptr) 
+    {
+        MessageBox(NULL, "Please select a start point", "Undefined start point", MB_OK);
+        return;
+    }
+    else if (graph->getEnd() == nullptr)
+    {
+        MessageBox(NULL, "Please select an end point", "Undefined end point", MB_OK);
+        return;
+    } 
+    graph->lock();
+    runner->run(Option::DIJKSTRA);
+}
+
 // draw a square on the given position with the given color.
 void Display::drawSquare(int x, int y, int size, sf::Color color)
 {
@@ -78,12 +102,12 @@ shared_ptr<Square> Display::getSquareOnMousePos()
     sf::Vector2i mousepos = sf::Mouse::getPosition(*window);
     int mouseX = mousepos.x;
     int mouseY = mousepos.y;
-    if (mouseX > 35 && mouseX < (squareDim * g->getDimension()) + 35 &&
-        mouseY > 15 && mouseY < (squareDim * g->getDimension()) + 15) 
+    if (mouseX > 35 && mouseX < (squareDim * graph->getDimension()) + 35 &&
+        mouseY > 15 && mouseY < (squareDim * graph->getDimension()) + 15) 
     {
         int squareX = (mouseX - 35) / squareDim;
         int squareY = (mouseY - 15) / squareDim;
-        return g->getSquare(squareX, squareY);
+        return graph->getSquare(squareX, squareY);
     }
     return nullptr;
 }
@@ -93,10 +117,10 @@ void Display::editStart()
     shared_ptr<Square> squareObj = getSquareOnMousePos();
     if (squareObj != nullptr)
     {
-        if (squareObj != g->getEnd() && !squareObj->isWall())
+        if (squareObj != graph->getEnd() && !squareObj->isWall())
         {
             // delete old start:
-            shared_ptr<Square> startSquare = g->getStart();
+            shared_ptr<Square> startSquare = graph->getStart();
             if (startSquare != nullptr)
             {
                 drawSquare((squareDim * startSquare->getX()) + 35,
@@ -110,7 +134,7 @@ void Display::editStart()
                 (squareDim * squareObj->getY()) + 15,
                 squareDim - 1,
                 sf::Color(135, 206, 235));
-            g->setStart(squareObj->getX(), squareObj->getY());
+            graph->setStart(squareObj->getX(), squareObj->getY());
         }
     }
 }
@@ -120,10 +144,10 @@ void Display::editEnd()
     shared_ptr<Square> squareObj = getSquareOnMousePos();
     if (squareObj != nullptr)
     {
-        if (squareObj != g->getStart() && !squareObj->isWall())
+        if (squareObj != graph->getStart() && !squareObj->isWall())
         {
             // delete old end:
-            shared_ptr<Square> endSquare = g->getEnd();
+            shared_ptr<Square> endSquare = graph->getEnd();
             if (endSquare != nullptr)
             {
                 drawSquare((squareDim * endSquare->getX()) + 35,
@@ -137,7 +161,7 @@ void Display::editEnd()
                 (squareDim * squareObj->getY()) + 15,
                 squareDim - 1,
                 sf::Color(255, 204, 203));
-            g->setEnd(squareObj->getX(), squareObj->getY());
+            graph->setEnd(squareObj->getX(), squareObj->getY());
         }
     }
 }
@@ -147,7 +171,7 @@ void Display::editWall()
     shared_ptr<Square> squareObj = getSquareOnMousePos();
     if (squareObj != nullptr)
     {
-        if (squareObj != g->getStart() && squareObj != g->getEnd())
+        if (squareObj != graph->getStart() && squareObj != graph->getEnd())
         {
             if (squareObj->isWall())
             {
@@ -171,12 +195,12 @@ void Display::editWall()
 
 void Display::draw()
 {
-	for (int i = 0; i < g->getDimension(); i++) 
+	for (int i = 0; i < graph->getDimension(); i++) 
     {
-        for (int j = 0; j < g->getDimension(); j++) 
+        for (int j = 0; j < graph->getDimension(); j++) 
         {
             sf::RectangleShape square;
-            if (j == g->getDimension() - 1 || i == g->getDimension() - 1) 
+            if (j == graph->getDimension() - 1 || i == graph->getDimension() - 1) 
             {
                 drawSquare((squareDim * j) + 35,
                     (squareDim * i) + 15,
@@ -207,7 +231,7 @@ void Display::render()
             {
                 window->close();
             }
-            else if (event.type == sf::Event::MouseButtonReleased)
+            else if (!graph->isLocked() && event.type == sf::Event::MouseButtonPressed)
             {
                 if (gui->get<tgui::RadioButton>("editStart")->isChecked())
                     editStart();
@@ -230,16 +254,27 @@ void Display::notify(Subject& who)
     Info info = who.getInfo();
     if (info.status == Status::PATH)
     {
-        drawSquare((squareDim * info.x) + 35, 
-            (squareDim * info.y) + 15,
-            squareDim - 1, 
-            sf::Color(0, 128, 0));
+        if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd()) 
+        {
+            drawSquare((squareDim * info.x) + 35,
+                (squareDim * info.y) + 15,
+                squareDim - 1,
+                sf::Color(0, 128, 0));
+        }
     }
     else
     {
-        drawSquare((squareDim * info.x) + 35,
-            (squareDim * info.y) + 15,
-            squareDim - 1, 
-            sf::Color(255, 165, 0));
+        if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd()) 
+        {
+            drawSquare((squareDim * info.x) + 35,
+                (squareDim * info.y) + 15,
+                squareDim - 1,
+                sf::Color(255, 165, 0));
+        }
     }
+    window->clear(sf::Color(255, 255, 255));
+    gui->draw();
+    canvas->display();
+    window->display();
 }
+

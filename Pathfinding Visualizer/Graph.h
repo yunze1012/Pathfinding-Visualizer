@@ -14,6 +14,7 @@ class Graph
 	shared_ptr<Square> start;
 	shared_ptr<Square> end;
 	int dimension;
+	bool locked = false;
 
 public:
 	Graph();
@@ -28,6 +29,9 @@ public:
 	shared_ptr<Square> getStart();
 	shared_ptr<Square> getEnd();
 	int getDimension();
+
+	void lock();
+	bool isLocked();
 
 	// reset the graph to initial state
 	void init();
