@@ -53,6 +53,7 @@ void Display::init()
     gui->add(editWallOption, "editWall");
 }
 
+// draw a square on the given position with the given color.
 void Display::drawSquare(int x, int y, int size, sf::Color color)
 {
     sf::RectangleShape squareShape;
