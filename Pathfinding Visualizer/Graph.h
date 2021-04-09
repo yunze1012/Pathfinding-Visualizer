@@ -1,5 +1,4 @@
-#ifndef _GRAPH_H_
-#define _GRAPH_H_
+#pragma once
 
 #include <memory>
 #include <stdlib.h>
@@ -36,5 +35,3 @@ public:
 	// reset the graph to initial state
 	void init();
 };
-
-#endif

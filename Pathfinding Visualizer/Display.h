@@ -1,6 +1,4 @@
-#ifndef _DISPLAY_H_
-#define _DISPLAY_H_
-
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <TGUI/TGUI.hpp>
@@ -37,6 +35,4 @@ public:
 	void draw();
 	void render();
 };
-
-#endif
 

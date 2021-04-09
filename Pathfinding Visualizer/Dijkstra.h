@@ -1,10 +1,10 @@
-#ifndef _DIJKSTRA_H_
-#define _DIJKSTRA_H_
+#pragma once
 
 #include <climits>
 #include <iostream>
 #include <queue>
 #include <utility>
+
 #include "Algorithm.h"
 #include "Graph.h"
 
@@ -23,6 +23,3 @@ public:
 	Dijkstra(shared_ptr<Graph> graph);
 	void run() override;
 };
-
-#endif
-

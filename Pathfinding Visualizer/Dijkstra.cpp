@@ -53,17 +53,12 @@ void Dijkstra::print()
 		currentSquare = currentSquare->getPreviousSquare();
 	}
 
-	if (finalPath[finalPath.size() - 1] != graph->getStart())
-	{
-		cout << "No path" << endl;
-		return;
-	}
+	if (finalPath[finalPath.size() - 1] != graph->getStart()) return;
 
 	for (int i = finalPath.size() - 1; i >= 0; i--)
 	{
 		finalPath[i]->setPath();
 		finalPath[i]->notifyObserver();
-		// cout << "(" << finalPath.at(i)->getX() << ", " << finalPath.at(i)->getY() << "), ";
 	}
 }
 

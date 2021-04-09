@@ -3,11 +3,10 @@
 Display::Display(shared_ptr<Graph> graph, shared_ptr<Runner> runner) 
     : graph(graph), runner(runner)
 {
-    window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 900), "Pathfinder Visualizer V0.1", sf::Style::Titlebar | sf::Style::Close);
+    window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 900), "Pathfinder Visualizer", sf::Style::Titlebar | sf::Style::Close);
     gui = make_shared<tgui::GuiSFML>(*window);
     canvas = tgui::Canvas::create();
     gui->add(canvas);
-    // squareDim = 35;
     squareDim = 899 / graph->getDimension();
     for (int i = 0; i < graph->getDimension(); i++)
     {
@@ -80,7 +79,8 @@ void Display::run()
     {
         MessageBox(NULL, "Please select an end point", "Undefined end point", MB_OK);
         return;
-    } 
+    }
+
     graph->lock();
     runner->run(Option::DIJKSTRA);
 }
@@ -93,7 +93,7 @@ void Display::drawSquare(int x, int y, int size, sf::Color color)
     squareShape.setOutlineColor(sf::Color(192, 192, 192));
     squareShape.setOutlineThickness(1);
     squareShape.setFillColor(color);
-    squareShape.setPosition(x, y);
+    squareShape.setPosition(squareDim * x + 35, squareDim * y + 15);
     canvas->draw(squareShape);
 }
 
@@ -123,17 +123,11 @@ void Display::editStart()
             shared_ptr<Square> startSquare = graph->getStart();
             if (startSquare != nullptr)
             {
-                drawSquare((squareDim * startSquare->getX()) + 35,
-                    (squareDim * startSquare->getY()) + 15,
-                    squareDim - 1,
-                    sf::Color(255, 255, 255));
+                drawSquare(startSquare->getX(), startSquare->getY(), squareDim - 1, sf::Color(255, 255, 255));
             }
 
             // drawing:
-            drawSquare((squareDim * squareObj->getX()) + 35,
-                (squareDim * squareObj->getY()) + 15,
-                squareDim - 1,
-                sf::Color(135, 206, 235));
+            drawSquare(squareObj->getX(), squareObj->getY(), squareDim - 1, sf::Color(135, 206, 235));
             graph->setStart(squareObj->getX(), squareObj->getY());
         }
     }
@@ -150,17 +144,11 @@ void Display::editEnd()
             shared_ptr<Square> endSquare = graph->getEnd();
             if (endSquare != nullptr)
             {
-                drawSquare((squareDim * endSquare->getX()) + 35,
-                    (squareDim * endSquare->getY()) + 15,
-                    squareDim - 1,
-                    sf::Color(255, 255, 255));
+                drawSquare(endSquare->getX(), endSquare->getY(), squareDim - 1, sf::Color(255, 255, 255));
             }
 
             // drawing:
-            drawSquare((squareDim * squareObj->getX()) + 35,
-                (squareDim * squareObj->getY()) + 15,
-                squareDim - 1,
-                sf::Color(255, 204, 203));
+            drawSquare(squareObj->getX(), squareObj->getY(), squareDim - 1, sf::Color(255, 204, 203));
             graph->setEnd(squareObj->getX(), squareObj->getY());
         }
     }
@@ -175,18 +163,11 @@ void Display::editWall()
         {
             if (squareObj->isWall())
             {
-                drawSquare((squareDim * squareObj->getX()) + 35,
-                    (squareDim * squareObj->getY()) + 15,
-                    squareDim - 1,
-                    sf::Color(255, 255, 255));
-
+                drawSquare(squareObj->getX(), squareObj->getY(), squareDim - 1, sf::Color(255, 255, 255));
             }
             else
             {
-                drawSquare((squareDim * squareObj->getX()) + 35,
-                    (squareDim * squareObj->getY()) + 15,
-                    squareDim - 1,
-                    sf::Color(192, 192, 192));
+                drawSquare(squareObj->getX(), squareObj->getY(), squareDim - 1, sf::Color(192, 192, 192));
             }
             squareObj->changeWall();
         }
@@ -202,17 +183,11 @@ void Display::draw()
             sf::RectangleShape square;
             if (j == graph->getDimension() - 1 || i == graph->getDimension() - 1) 
             {
-                drawSquare((squareDim * j) + 35,
-                    (squareDim * i) + 15,
-                    squareDim - 1,
-                    sf::Color(255, 255, 255));
+                drawSquare(j, i, squareDim - 1, sf::Color(255, 255, 255));
             }
             else 
             {
-                drawSquare((squareDim * j) + 35,
-                    (squareDim * i) + 15,
-                    squareDim,
-                    sf::Color(255, 255, 255));
+                drawSquare(j, i, squareDim, sf::Color(255, 255, 255));
             }
         }
 	}
@@ -256,20 +231,14 @@ void Display::notify(Subject& who)
     {
         if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd()) 
         {
-            drawSquare((squareDim * info.x) + 35,
-                (squareDim * info.y) + 15,
-                squareDim - 1,
-                sf::Color(0, 128, 0));
+            drawSquare(info.x, info.y, squareDim - 1, sf::Color(0, 128, 0));
         }
     }
     else
     {
         if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd()) 
         {
-            drawSquare((squareDim * info.x) + 35,
-                (squareDim * info.y) + 15,
-                squareDim - 1,
-                sf::Color(255, 165, 0));
+            drawSquare(info.x, info.y, squareDim - 1, sf::Color(255, 165, 0));
         }
     }
     window->clear(sf::Color(255, 255, 255));
@@ -277,4 +246,3 @@ void Display::notify(Subject& who)
     canvas->display();
     window->display();
 }
-
