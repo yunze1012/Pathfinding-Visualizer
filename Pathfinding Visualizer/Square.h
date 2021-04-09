@@ -1,22 +1,23 @@
 #ifndef _SQUARE_H_
 #define _SQUARE_H_
 
-#include <memory>
 #include <climits>
+#include <memory>
+#include "Subject.h"
 
 using namespace std;
 
-class Square
+class Square : public Subject
 {
 	int x;
 	int y;
-	bool wall = false; 
-	bool path = false;
+	bool wall = false;
 	bool visited = false;
+	bool path = false;
 	int distance = INT_MAX;
 	shared_ptr<Square> previousSquare;
 
- public:
+public:
 	int getX();
 	int getY();
 	int getDistance();
@@ -31,6 +32,9 @@ class Square
 	bool isVisited();
 	void setPreviousSquare(shared_ptr<Square> previousSquare);
 	Square(int x, int y);
+
+	// observer methods:
+	Info getInfo() override;
 };
 
 inline

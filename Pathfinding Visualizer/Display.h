@@ -6,11 +6,14 @@
 #include <TGUI/TGUI.hpp>
 
 #include "Graph.h"
+#include "Observer.h"
+#include "Runner.h"
 
-class Display
+class Display : public Observer
 {
 	int squareDim;
 	shared_ptr<Graph> g;
+	shared_ptr <Runner> runner;
 	shared_ptr<sf::RenderWindow> window;
 	shared_ptr<tgui::GuiSFML> gui;
 	shared_ptr<tgui::Canvas> canvas;
@@ -21,8 +24,11 @@ class Display
 	void reset();
 	shared_ptr<Square> getSquareOnMousePos();
 
+	// Observer methods:
+	void notify(Subject & who) override;
+
 public:
-	Display(shared_ptr<Graph> g);
+	Display(shared_ptr<Graph> g, shared_ptr<Runner> runner);
 	void init();
 	void draw();
 	void render();

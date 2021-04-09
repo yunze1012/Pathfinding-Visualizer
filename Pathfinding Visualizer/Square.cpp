@@ -64,3 +64,12 @@ void Square::setPreviousSquare(shared_ptr<Square> previousSquare)
 }
 
 Square::Square(int x, int y) : x{ x }, y{ y } {}
+
+Info Square::getInfo()
+{
+	if (path) 
+	{
+		return Info{ Status::PATH, x, y };
+	}
+	return Info{ Status::VISITED, x, y };
+}

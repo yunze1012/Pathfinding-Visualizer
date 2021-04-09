@@ -12,10 +12,10 @@ Dijkstra::Dijkstra(shared_ptr<Graph> graph)
 	}
 }
 
-void Dijkstra::run(shared_ptr<Square> start, shared_ptr<Square> end)
+void Dijkstra::run()
 {
 	vector<shared_ptr<Square>> visitedNodes;
-	start->setDistance(0);
+	graph->getStart()->setDistance(0);
 	while (!unvisitedSquares.empty()) 
 	{
 		resortUnvisitedSquares();
@@ -31,27 +31,29 @@ void Dijkstra::run(shared_ptr<Square> start, shared_ptr<Square> end)
 		}
 
 		closestSquare->setVisited();
+		closestSquare->notifyObserver();
 		visitedNodes.emplace_back(closestSquare);
 		
-		if (closestSquare == end)
+		if (closestSquare == graph->getEnd())
 		{
 			break;
 		}
 		updateUnvisitedNeighbors(closestSquare);
-	}	
+	}
+	print();
 }
 
-void Dijkstra::print(shared_ptr<Square> start, shared_ptr<Square> end)
+void Dijkstra::print()
 {
 	vector<shared_ptr<Square>> finalPath;
-	auto currentSquare = end;
+	auto currentSquare = graph->getEnd();
 	while (currentSquare != nullptr)
 	{
 		finalPath.emplace_back(currentSquare);
 		currentSquare = currentSquare->getPreviousSquare();
 	}
 
-	if (finalPath[finalPath.size() - 1] != start)
+	if (finalPath[finalPath.size() - 1] != graph->getStart())
 	{
 		cout << "No path" << endl;
 		return;
@@ -59,7 +61,9 @@ void Dijkstra::print(shared_ptr<Square> start, shared_ptr<Square> end)
 
 	for (int i = finalPath.size() - 1; i >= 0; i--)
 	{
-		cout << "(" << finalPath.at(i)->getX() << ", " << finalPath.at(i)->getY() << "), ";
+		finalPath[i]->setPath();
+		finalPath[i]->notifyObserver();
+		// cout << "(" << finalPath.at(i)->getX() << ", " << finalPath.at(i)->getY() << "), ";
 	}
 }
 

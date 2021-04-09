@@ -1,7 +1,7 @@
 #include "Display.h"
 
-Display::Display(shared_ptr<Graph> g) 
-    : g(g) 
+Display::Display(shared_ptr<Graph> g, shared_ptr<Runner> runner) 
+    : g(g), runner(runner)
 {
     window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 900), "Pathfinder Visualizer V0.1", sf::Style::Titlebar | sf::Style::Close);
     gui = make_shared<tgui::GuiSFML>(*window);
@@ -9,6 +9,13 @@ Display::Display(shared_ptr<Graph> g)
     gui->add(canvas);
     // squareDim = 35;
     squareDim = 899 / g->getDimension();
+    for (int i = 0; i < g->getDimension(); i++)
+    {
+        for (int j = 0; j < g->getDimension(); j++) 
+        {
+            g->getSquare(i, j)->attach(make_shared<Display>(*this));
+        }
+    }
 }
 
 void Display::init()
@@ -27,6 +34,7 @@ void Display::init()
     runButton->setPosition(1000, 800);
     runButton->setSize(150, 50);
     runButton->setText("Run");
+    runButton->onPress([&] {runner->run(Option::DIJKSTRA);  });
     gui->add(runButton, "run");
 
     tgui::Button::Ptr resetButton = tgui::Button::create();
@@ -171,16 +179,16 @@ void Display::draw()
             if (j == g->getDimension() - 1 || i == g->getDimension() - 1) 
             {
                 drawSquare((squareDim * j) + 35,
-                           (squareDim * i) + 15,
-                           squareDim - 1,
-                           sf::Color(255, 255, 255));
+                    (squareDim * i) + 15,
+                    squareDim - 1,
+                    sf::Color(255, 255, 255));
             }
             else 
             {
                 drawSquare((squareDim * j) + 35,
-                           (squareDim * i) + 15,
-                            squareDim,
-                            sf::Color(255, 255, 255));
+                    (squareDim * i) + 15,
+                    squareDim,
+                    sf::Color(255, 255, 255));
             }
         }
 	}
@@ -213,5 +221,25 @@ void Display::render()
         gui->draw();
         canvas->display();
         window->display();
+    }
+}
+
+
+void Display::notify(Subject& who) 
+{
+    Info info = who.getInfo();
+    if (info.status == Status::PATH)
+    {
+        drawSquare((squareDim * info.x) + 35, 
+            (squareDim * info.y) + 15,
+            squareDim - 1, 
+            sf::Color(0, 128, 0));
+    }
+    else
+    {
+        drawSquare((squareDim * info.x) + 35,
+            (squareDim * info.y) + 15,
+            squareDim - 1, 
+            sf::Color(255, 165, 0));
     }
 }
