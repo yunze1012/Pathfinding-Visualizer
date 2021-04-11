@@ -1,5 +1,7 @@
 #pragma once
 
+#include <omp.h>
+
 class Algorithm 
 {
 public:

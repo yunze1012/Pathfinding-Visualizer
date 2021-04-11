@@ -10,6 +10,8 @@
 
 using namespace std;
 
+const int THREADS = 96;
+
 class Dijkstra : public Algorithm
 {
 	shared_ptr<Graph> graph;
@@ -18,6 +20,7 @@ class Dijkstra : public Algorithm
 	void resortUnvisitedSquares();
 	void updateUnvisitedNeighbors(shared_ptr<Square> s);
 	void print();
+	shared_ptr<Square> getClosestSquare();
 	
 public:
 	Dijkstra(shared_ptr<Graph> graph);
