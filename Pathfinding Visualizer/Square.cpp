@@ -73,3 +73,11 @@ Info Square::getInfo()
 	}
 	return Info{ Status::VISITED, x, y };
 }
+
+int Square::getG() { return g; }
+
+int Square::getH() { return h; }
+
+void Square::setG(int g) { this->g = g; }
+
+void Square::setH(int h) { this->h = h; }

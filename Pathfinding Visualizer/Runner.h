@@ -1,9 +1,11 @@
 #pragma once
 #include "Dijkstra.h"
+#include "Astar.h"
 
 enum class Option 
 {
-	DIJKSTRA
+	DIJKSTRA,
+	ASTAR
 };
 
 class Runner

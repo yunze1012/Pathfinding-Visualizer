@@ -58,6 +58,13 @@ void Display::init()
     editWallOption->setPosition(1000, 200);
     editWallOption->tgui::RadioButton::setText("Edit Wall");
     gui->add(editWallOption, "editWall");
+
+    tgui::ComboBox::Ptr selectAlgorithmComboBox = tgui::ComboBox::create();
+    selectAlgorithmComboBox->setPosition(1000, 400);
+    selectAlgorithmComboBox->setSize(150, 30);
+    selectAlgorithmComboBox->addItem("Dijkstra", "dijkstra");
+    selectAlgorithmComboBox->addItem("A*", "astar");
+    gui->add(selectAlgorithmComboBox, "selectAlgorithm");
 }
 
 void Display::reset()
@@ -82,7 +89,14 @@ void Display::run()
     }
 
     graph->lock();
-    runner->run(Option::DIJKSTRA);
+    if (gui->get<tgui::ComboBox>("selectAlgorithm")->getSelectedItemId() == "dijkstra")
+    {
+        runner->run(Option::DIJKSTRA);
+    }
+    else if (gui->get<tgui::ComboBox>("selectAlgorithm")->getSelectedItemId() == "astar")
+    {
+        runner->run(Option::ASTAR);
+    };
 }
 
 // draw a square on the given position with the given color.
@@ -229,19 +243,16 @@ void Display::notify(Subject& who)
     Info info = who.getInfo();
     if (info.status == Status::PATH)
     {
-        if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd()) 
+        if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd())
         {
             drawSquare(info.x, info.y, squareDim - 1, sf::Color(0, 128, 0));
         }
     }
-    else
+    else if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd())
     {
-        if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd()) 
-        {
-            drawSquare(info.x, info.y, squareDim - 1, sf::Color(255, 165, 0));
-        }
+        drawSquare(info.x, info.y, squareDim - 1, sf::Color(255, 165, 0));
     }
-    window->clear(sf::Color(255, 255, 255));
+    // window->clear(sf::Color(255, 255, 255));
     gui->draw();
     canvas->display();
     window->display();

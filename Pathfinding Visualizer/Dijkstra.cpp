@@ -12,10 +12,6 @@ Dijkstra::Dijkstra(shared_ptr<Graph> graph)
 	}
 }
 
-
-
-
-
 //void Dijkstra::run()
 //{
 //	graph->getStart()->setDistance(0);
@@ -34,7 +30,7 @@ Dijkstra::Dijkstra(shared_ptr<Graph> graph)
 //		}
 
 //		closestSquare->setVisited();
-//		// closestSquare->notifyObserver();
+//		closestSquare->notifyObserver();
 		
 //		if (closestSquare == graph->getEnd())
 //		{
@@ -42,10 +38,8 @@ Dijkstra::Dijkstra(shared_ptr<Graph> graph)
 //		}
 //		updateUnvisitedNeighbors(closestSquare);
 //	}
-//	// print();
+//	print();
 //} 
-
-
 
 void Dijkstra::run()
 {
@@ -111,25 +105,21 @@ vector<shared_ptr<Square>> Dijkstra::getUnvisitedNeighbors(shared_ptr<Square> s)
 	vector<shared_ptr<Square>> unvisitedNeighbors;
 	int x = s->getX();
 	int y = s->getY();
-	omp_set_num_threads(THREADS);
-	#pragma omp parallel shared(unvisitedNeighbors)
+	if (x > 0 && !(graph->getSquare(x - 1, y)->isVisited()))
 	{
-		if (x > 0 && !(graph->getSquare(x - 1, y)->isVisited()))
-		{
-			unvisitedNeighbors.emplace_back(graph->getSquare(x - 1, y));
-		}
-		if (x < graph->getDimension() - 1 && !(graph->getSquare(x + 1, y)->isVisited()))
-		{
-			unvisitedNeighbors.emplace_back(graph->getSquare(x + 1, y));
-		}
-		if (y > 0 && !(graph->getSquare(x, y - 1)->isVisited()))
-		{
-			unvisitedNeighbors.emplace_back(graph->getSquare(x, y - 1));
-		}
-		if (y < graph->getDimension() - 1 && !(graph->getSquare(x, y + 1)->isVisited()))
-		{
-			unvisitedNeighbors.emplace_back(graph->getSquare(x, y + 1));
-		}
+		unvisitedNeighbors.emplace_back(graph->getSquare(x - 1, y));
+	}
+	if (x < graph->getDimension() - 1 && !(graph->getSquare(x + 1, y)->isVisited()))
+	{
+		unvisitedNeighbors.emplace_back(graph->getSquare(x + 1, y));
+	}
+	if (y > 0 && !(graph->getSquare(x, y - 1)->isVisited()))
+	{
+		unvisitedNeighbors.emplace_back(graph->getSquare(x, y - 1));
+	}
+	if (y < graph->getDimension() - 1 && !(graph->getSquare(x, y + 1)->isVisited()))
+	{
+		unvisitedNeighbors.emplace_back(graph->getSquare(x, y + 1));
 	}
 	return unvisitedNeighbors;
 }

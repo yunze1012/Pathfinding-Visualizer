@@ -10,8 +10,6 @@
 
 using namespace std;
 
-const int THREADS = 96;
-
 class Dijkstra : public Algorithm
 {
 	shared_ptr<Graph> graph;

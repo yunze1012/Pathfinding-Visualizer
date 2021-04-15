@@ -14,19 +14,25 @@ class Square : public Subject
 	bool wall = false;
 	bool visited = false;
 	bool path = false;
-	int distance = INT_MAX;
+	int distance = INT_MAX;	// f for Astar
+	int g = 0;
+	int h = 0;
 	shared_ptr<Square> previousSquare;
 
 public:
 	int getX();
 	int getY();
 	int getDistance();
+	int getG();
+	int getH();
 	shared_ptr<Square> getPreviousSquare();
 
 	void setDistance(int distance);
 	void changeWall();
 	void setPath();
 	void setVisited();
+	void setG(int);
+	void setH(int);
 	void reset();
 	bool isWall();
 	bool isVisited();
