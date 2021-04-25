@@ -18,6 +18,7 @@ shared_ptr<Square> Square::getPreviousSquare() {
 void Square::setPath()
 {
 	path = true;
+	notifyObserver();
 }
 
 void Square::setDistance(int distance)
@@ -28,6 +29,7 @@ void Square::setDistance(int distance)
 void Square::setVisited()
 {
 	visited = true;
+	notifyObserver();
 }
 
 void Square::reset()

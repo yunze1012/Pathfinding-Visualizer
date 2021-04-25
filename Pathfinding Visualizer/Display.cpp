@@ -64,6 +64,8 @@ void Display::init()
     selectAlgorithmComboBox->setSize(150, 30);
     selectAlgorithmComboBox->addItem("Dijkstra", "dijkstra");
     selectAlgorithmComboBox->addItem("A*", "astar");
+    selectAlgorithmComboBox->addItem("Depth-first search", "DFS");
+    selectAlgorithmComboBox->addItem("Breadth-first search", "BFS");
     gui->add(selectAlgorithmComboBox, "selectAlgorithm");
 }
 
@@ -96,7 +98,15 @@ void Display::run()
     else if (gui->get<tgui::ComboBox>("selectAlgorithm")->getSelectedItemId() == "astar")
     {
         runner->run(Option::ASTAR);
-    };
+    }
+    else if (gui->get<tgui::ComboBox>("selectAlgorithm")->getSelectedItemId() == "DFS")
+    {
+        runner->run(Option::DFS);
+    }
+    else if (gui->get<tgui::ComboBox>("selectAlgorithm")->getSelectedItemId() == "BFS")
+    {
+        runner->run(Option::BFS);
+    }
 }
 
 // draw a square on the given position with the given color.

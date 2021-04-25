@@ -20,7 +20,6 @@ public:
 	Graph(int dimension);
 	void setDimension(int dim);
 	void setPath(int x, int y);
-	// void setWall(int x, int y);
 	void setStart(int x, int y);
 	void setEnd(int x, int y);
 	void reset();

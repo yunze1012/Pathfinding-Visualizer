@@ -1,11 +1,16 @@
 #pragma once
+
 #include "Dijkstra.h"
 #include "Astar.h"
+#include "DFS.h"
+#include "BFS.h"
 
 enum class Option 
 {
 	DIJKSTRA,
-	ASTAR
+	ASTAR,
+	DFS,
+	BFS
 };
 
 class Runner
@@ -17,3 +22,4 @@ public:
 	Runner(shared_ptr<Graph> graph);
 	void run(Option option);
 };
+

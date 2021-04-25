@@ -28,11 +28,6 @@ Graph::Graph(int dimension)
 	}
 }
 
-/* void Graph::setWall(int x, int y)
-{
-	graph[x][y]->setWall();
-} */
-
 void Graph::setPath(int x, int y)
 {
 	graph[x][y].get()->setPath();
