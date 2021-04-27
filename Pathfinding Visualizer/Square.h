@@ -1,5 +1,4 @@
-#ifndef _SQUARE_H_
-#define _SQUARE_H_
+#pragma once
 
 #include <climits>
 #include <memory>
@@ -9,50 +8,45 @@ using namespace std;
 
 class Square : public Subject
 {
-	int x;
-	int y;
+	bool path = false;
 	bool wall = false;
 	bool visited = false;
-	bool path = false;
-	int distance = INT_MAX;	// f for Astar
+	char visitedBy;	// for bidirectional 
+	int distance = INT_MAX;	// f for A*
 	int g = 0;
 	int h = 0;
+	int x;
+	int y;
 	shared_ptr<Square> previousSquare;
+	shared_ptr<Square> nextSquare;	// for bidirectional
 
 public:
-	int getX();
-	int getY();
-	int getDistance();
-	int getG();
-	int getH();
-	shared_ptr<Square> getPreviousSquare();
-
-	void setDistance(int distance);
-	void changeWall();
-	void setPath();
-	void setVisited();
-	void setG(int);
-	void setH(int);
-	void reset();
+	// getters
 	bool isWall();
 	bool isVisited();
+	char getVisitedBy(); // for bidirectional
+	int getDistance();
+	int getG(); // for A*
+	int getH(); // for A*
+	int getX();
+	int getY();
+	shared_ptr<Square> getPreviousSquare();
+	shared_ptr<Square> getNextSquare(); // for bidirectional
+
+	// setters
+	void changeWall();
+	void setDistance(int distance);
+	void setG(int); // for A*
+	void setH(int); // for A*
+	void setNextSquare(shared_ptr<Square> nextSquare); // for bidirectional
+	void setPath();
 	void setPreviousSquare(shared_ptr<Square> previousSquare);
+	void setVisited();
+	void setVisitedBy(char); // for bidirectional
+	
 	Square(int x, int y);
+	virtual void reset();
 
 	// observer methods:
 	Info getInfo() override;
 };
-
-inline
-bool operator<(const shared_ptr<Square> lhs, const shared_ptr<Square> rhs) 
-{
-	return lhs->getDistance() < rhs->getDistance();
-}
-
-inline
-bool operator>(const shared_ptr<Square> lhs, const shared_ptr<Square> rhs) 
-{
-	return lhs->getDistance() > rhs->getDistance();
-}
-
-#endif

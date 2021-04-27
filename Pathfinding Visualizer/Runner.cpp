@@ -21,9 +21,16 @@ void Runner::run(Option option)
 	{
 		algorithm = make_shared<BFS>(graph);
 	}
+	else if (option == Option::BIDIRECTIONAL)
+	{
+		algorithm = make_shared<Bidirectional>(graph);
+	}
 
+	// chrono is to computer the runtime of the selected algorithm:
 	auto start = chrono::high_resolution_clock::now();
+
 	algorithm->run();
+
 	auto stop = chrono::high_resolution_clock::now();
 	auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 	cout << duration.count() << endl;

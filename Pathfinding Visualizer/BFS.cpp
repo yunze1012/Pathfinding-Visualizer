@@ -9,6 +9,7 @@ void BFS::run()
 
 	while (!waitingList.empty())
 	{
+		// pop the first square in the queue and visit its neighbours
 		shared_ptr<Square> currentSquare = waitingList.front();
 		waitingList.pop();
 		vector<shared_ptr<Square>> unvisitedNeighbours = getUnvisitedNeighbors(currentSquare);

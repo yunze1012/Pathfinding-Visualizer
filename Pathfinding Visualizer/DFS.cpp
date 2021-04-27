@@ -12,11 +12,13 @@ void DFS::run()
 		waitingList.pop();
 		currentSquare->setVisited();
 		vector<shared_ptr<Square>> unvisitedNeighbours = getUnvisitedNeighbors(currentSquare);
+		// for each neighbour, link them to the current square and push them in the waiting list so they can be checked next:
 		for (shared_ptr<Square> neighbour : unvisitedNeighbours)
 		{
 			if (!neighbour->isWall())
 			{
 				neighbour->setPreviousSquare(currentSquare);
+				// reached the goal:
 				if (neighbour == graph->getEnd()) 
 				{
 					print();

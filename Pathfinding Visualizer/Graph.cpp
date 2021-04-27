@@ -3,9 +3,11 @@
 Graph::Graph()
 {
 	dimension = 50;
-	for (int i = 0; i < dimension; i++) {
+	for (int i = 0; i < dimension; i++) 
+	{
 		vector<shared_ptr<Square>> squares;
-		for (int j = 0; j < dimension; j++) {
+		for (int j = 0; j < dimension; j++) 
+		{
 			shared_ptr<Square> square = make_shared<Square>(i, j);
 			squares.push_back(square);
 		}
@@ -28,6 +30,35 @@ Graph::Graph(int dimension)
 	}
 }
 
+// getters:
+
+shared_ptr<Square> Graph::getSquare(int x, int y)
+{
+	return graph[x][y];
+}
+
+int Graph::getDimension()
+{
+	return dimension;
+}
+
+bool Graph::isLocked() 
+{
+	return locked;
+}
+
+shared_ptr<Square> Graph::getStart()
+{
+	return start;
+}
+
+shared_ptr<Square> Graph::getEnd()
+{
+	return end;
+}
+
+// setters:
+
 void Graph::setPath(int x, int y)
 {
 	graph[x][y].get()->setPath();
@@ -36,6 +67,22 @@ void Graph::setPath(int x, int y)
 void Graph::setDimension(int dim)
 {
 	this->dimension = dim;
+}
+
+void Graph::setStart(int x, int y)
+{
+	this->start = graph[x][y];
+}
+
+void Graph::setEnd(int x, int y)
+{
+	this->end = graph[x][y];
+}
+
+
+void Graph::lock() 
+{
+	locked = true;
 }
 
 void Graph::reset() 
@@ -50,51 +97,4 @@ void Graph::reset()
 	start = nullptr;
 	end = nullptr;
 	locked = false;
-}
-
-shared_ptr<Square> Graph::getSquare(int x, int y)
-{
-	return graph[x][y];
-}
-
-int Graph::getDimension()
-{
-	return dimension;
-}
-
-void Graph::init()
-{
-	for (vector<shared_ptr<Square>> squares : graph) {
-		for (shared_ptr<Square> square : squares) {
-			square.get()->reset();
-		}
-	}
-}
-
-void Graph::setStart(int x, int y)
-{
-	this->start = graph[x][y];
-}
-
-void Graph::setEnd(int x, int y)
-{
-	this->end = graph[x][y];
-}
-
-shared_ptr<Square> Graph::getStart()
-{
-	return start;
-}
-
-shared_ptr<Square> Graph::getEnd()
-{
-	return end;
-}
-
-void Graph::lock() {
-	locked = true;
-}
-
-bool Graph::isLocked() {
-	return locked;
 }

@@ -4,10 +4,9 @@
 
 #include "Algorithm.h"
 
-using namespace std;
-
 class DFS : public Algorithm
 {
+	// set of squares waiting to be checked:
 	stack<shared_ptr<Square>> waitingList;
 public:
 	DFS(shared_ptr<Graph> graph);

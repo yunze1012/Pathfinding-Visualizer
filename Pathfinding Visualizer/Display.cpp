@@ -3,11 +3,15 @@
 Display::Display(shared_ptr<Graph> graph, shared_ptr<Runner> runner) 
     : graph(graph), runner(runner)
 {
+    // creating window and canvas:
     window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 900), "Pathfinder Visualizer", sf::Style::Titlebar | sf::Style::Close);
     gui = make_shared<tgui::GuiSFML>(*window);
     canvas = tgui::Canvas::create();
     gui->add(canvas);
+
     squareDim = 899 / graph->getDimension();
+
+    // attaching squares to observer:
     for (int i = 0; i < graph->getDimension(); i++)
     {
         for (int j = 0; j < graph->getDimension(); j++) 
@@ -19,6 +23,7 @@ Display::Display(shared_ptr<Graph> graph, shared_ptr<Runner> runner)
 
 void Display::init()
 {
+    // draws separation line:
     // Line vector: start->end point.
     sf::Vertex line[2] =
     {
@@ -28,7 +33,7 @@ void Display::init()
     canvas->clear(sf::Color(255, 255, 255));
     canvas->draw(line, 2, sf::Lines);
 
-
+    // Run algorithm button:
     tgui::Button::Ptr runButton = tgui::Button::create();
     runButton->setPosition(1000, 800);
     runButton->setSize(150, 50);
@@ -36,6 +41,7 @@ void Display::init()
     runButton->onPress([&] { run(); });
     gui->add(runButton, "run");
 
+    // Reset graph button:
     tgui::Button::Ptr resetButton = tgui::Button::create();
     resetButton->setPosition(1000, 700);
     resetButton->setSize(150, 50);
@@ -43,22 +49,26 @@ void Display::init()
     resetButton->onPress([&] { reset(); });
     gui->add(resetButton, "reset");
 
+    // Edit start option:
     tgui::RadioButton::Ptr editStartOption = tgui::RadioButton::create();
     editStartOption->setPosition(1000, 100);
     editStartOption->tgui::RadioButton::setText("Edit Start");
     gui->add(editStartOption, "editStart");
     
-    
+    // Edit end option:
     tgui::RadioButton::Ptr editEndOption = tgui::RadioButton::create();
     editEndOption->setPosition(1000, 150);
     editEndOption->tgui::RadioButton::setText("Edit End");
     gui->add(editEndOption, "editEnd");
 
+
+    // Edit wall option:
     tgui::RadioButton::Ptr editWallOption = tgui::RadioButton::create();
     editWallOption->setPosition(1000, 200);
     editWallOption->tgui::RadioButton::setText("Edit Wall");
     gui->add(editWallOption, "editWall");
 
+    // Algorithm selection scroll list:
     tgui::ComboBox::Ptr selectAlgorithmComboBox = tgui::ComboBox::create();
     selectAlgorithmComboBox->setPosition(1000, 400);
     selectAlgorithmComboBox->setSize(150, 30);
@@ -66,6 +76,7 @@ void Display::init()
     selectAlgorithmComboBox->addItem("A*", "astar");
     selectAlgorithmComboBox->addItem("Depth-first search", "DFS");
     selectAlgorithmComboBox->addItem("Breadth-first search", "BFS");
+    selectAlgorithmComboBox->addItem("Bidirectional search", "bidirectional");
     gui->add(selectAlgorithmComboBox, "selectAlgorithm");
 }
 
@@ -79,6 +90,7 @@ void Display::run()
 {
     if (graph->isLocked()) return;
     
+    // Cannot find start or end point:
     if (graph->getStart() == nullptr) 
     {
         MessageBox(NULL, "Please select a start point", "Undefined start point", MB_OK);
@@ -90,7 +102,10 @@ void Display::run()
         return;
     }
 
+    // locks the graph after running algorithm to avoid modifying it and creating undefined behaviours:
     graph->lock();
+
+    // Algorithm selection:
     if (gui->get<tgui::ComboBox>("selectAlgorithm")->getSelectedItemId() == "dijkstra")
     {
         runner->run(Option::DIJKSTRA);
@@ -107,9 +122,12 @@ void Display::run()
     {
         runner->run(Option::BFS);
     }
+    else if (gui->get<tgui::ComboBox>("selectAlgorithm")->getSelectedItemId() == "bidirectional")
+    {
+        runner->run(Option::BIDIRECTIONAL);
+    }
 }
 
-// draw a square on the given position with the given color.
 void Display::drawSquare(int x, int y, int size, sf::Color color)
 {
     sf::RectangleShape squareShape;
@@ -133,6 +151,7 @@ shared_ptr<Square> Display::getSquareOnMousePos()
         int squareY = (mouseY - 15) / squareDim;
         return graph->getSquare(squareX, squareY);
     }
+    // if mouse is not on a square:
     return nullptr;
 }
 
@@ -185,10 +204,12 @@ void Display::editWall()
     {
         if (squareObj != graph->getStart() && squareObj != graph->getEnd())
         {
+            // removing wall:
             if (squareObj->isWall())
             {
                 drawSquare(squareObj->getX(), squareObj->getY(), squareDim - 1, sf::Color(255, 255, 255));
             }
+            // creating wall:
             else
             {
                 drawSquare(squareObj->getX(), squareObj->getY(), squareDim - 1, sf::Color(192, 192, 192));
@@ -230,6 +251,7 @@ void Display::render()
             {
                 window->close();
             }
+            // checking for the current edit map option before running algorithm:
             else if (!graph->isLocked() && event.type == sf::Event::MouseButtonPressed)
             {
                 if (gui->get<tgui::RadioButton>("editStart")->isChecked())
@@ -251,6 +273,7 @@ void Display::render()
 void Display::notify(Subject& who) 
 {
     Info info = who.getInfo();
+    // green squares:
     if (info.status == Status::PATH)
     {
         if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd())
@@ -258,12 +281,19 @@ void Display::notify(Subject& who)
             drawSquare(info.x, info.y, squareDim - 1, sf::Color(0, 128, 0));
         }
     }
+    // if it is not a path, then it is a normal visited square (orange squares):
     else if (graph->getSquare(info.x, info.y) != graph->getStart() && graph->getSquare(info.x, info.y) != graph->getEnd())
     {
         drawSquare(info.x, info.y, squareDim - 1, sf::Color(255, 165, 0));
     }
-    // window->clear(sf::Color(255, 255, 255));
     gui->draw();
     canvas->display();
     window->display();
+}
+
+void Display::start() 
+{
+    init();
+    draw();
+    render();
 }

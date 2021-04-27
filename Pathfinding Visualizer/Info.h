@@ -1,4 +1,7 @@
 #pragma once
+
+// struct for passing subject information
+
 enum class Status
 {
 	VISITED,

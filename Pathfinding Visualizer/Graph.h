@@ -5,32 +5,39 @@
 #include <vector>
 #include "Square.h"
 
-using namespace std;
-
 class Graph
 {
+	// contain squares using 2d list
 	vector<vector<shared_ptr<Square>>> graph;
+
+	// start and end squares for searching
 	shared_ptr<Square> start;
 	shared_ptr<Square> end;
+
+	// number of squares on each row and column
 	int dimension;
+
+	// if true, graph cannot be modified
 	bool locked = false;
 
 public:
 	Graph();
 	Graph(int dimension);
-	void setDimension(int dim);
-	void setPath(int x, int y);
-	void setStart(int x, int y);
-	void setEnd(int x, int y);
-	void reset();
+
+	// getters
+	int getDimension();
 	shared_ptr<Square> getSquare(int x, int y);
 	shared_ptr<Square> getStart();
 	shared_ptr<Square> getEnd();
-	int getDimension();
-
-	void lock();
 	bool isLocked();
 
+	// setters
+	void lock();
+	void setDimension(int dim);
+	void setEnd(int x, int y);
+	void setPath(int x, int y);
+	void setStart(int x, int y);
+	
 	// reset the graph to initial state
-	void init();
+	void reset();
 };
