@@ -23,24 +23,24 @@ void Astar::run()
 			break;
 		}
 		// updating each neighbour with distance and heuristic information for the next iteration
-		updateUnvisitedNeighbors(closestSquare);
+		updateUnvisitedNeighbours(closestSquare);
 	}
 	print();
 } 
 
-void Astar::updateUnvisitedNeighbors(shared_ptr<Square> s)
+void Astar::updateUnvisitedNeighbours(shared_ptr<Square> s)
 {
-	vector<shared_ptr<Square>> unvisitedNeighbors = getUnvisitedNeighbors(s);
+	vector<shared_ptr<Square>> unvisitedNeighbours = getUnvisitedNeighbours(s);
 	omp_set_num_threads(THREADS);
-	#pragma omp parallel shared(unvisitedNeighbors)
+	#pragma omp parallel shared(unvisitedNeighbours)
 	{
 	#pragma omp for nowait
-		for (shared_ptr<Square> neighbor : unvisitedNeighbors)
+		for (shared_ptr<Square> neighbour : unvisitedNeighbours)
 		{
-			neighbor->setG(s->getG() + 1);
-			neighbor->setH(abs(neighbor->getX() - graph->getEnd()->getX()) + abs(neighbor->getY() - graph->getEnd()->getY()));
-			neighbor->setDistance(neighbor->getG() + neighbor->getH());
-			neighbor->setPreviousSquare(s);
+			neighbour->setG(s->getG() + 1);
+			neighbour->setH(abs(graph->getEnd()->getX() - neighbour->getX()) + abs(graph->getEnd()->getY() - neighbour->getY()));
+			neighbour->setDistance(neighbour->getG() + neighbour->getH());
+			neighbour->setPreviousSquare(s);
 		}
 	}
 }
@@ -60,8 +60,12 @@ shared_ptr<Square> Astar::getClosestSquare()
 			for (int j = 0; j < graph->getDimension(); j++) 
 			{
 				if (!graph->getSquare(i, j)->isVisited() && 
-					!graph->getSquare(i, j)->isWall() && 
-					(closestSquare_THREAD == nullptr || graph->getSquare(i, j)->getDistance() < closestSquare_THREAD->getDistance())) 
+
+					!graph->getSquare(i, j)->isWall() &&
+
+					(closestSquare_THREAD == nullptr ||
+					graph->getEnd()->getX() - graph->getStart()->getX() >= 0 && graph->getSquare(i, j)->getDistance() <= closestSquare_THREAD->getDistance() ||
+					graph->getEnd()->getX() - graph->getStart()->getX() < 0 && graph->getSquare(i, j)->getDistance() < closestSquare_THREAD->getDistance()))
 				{
 					closestSquare_THREAD = graph->getSquare(i, j);
 				}
@@ -71,7 +75,9 @@ shared_ptr<Square> Astar::getClosestSquare()
 		// comparing the closest square found from each thread to find the common (or global) closest square between them 4:
 		#pragma omp critical
 		{
-			if (closestSquare == nullptr || closestSquare_THREAD->getDistance() < closestSquare->getDistance()) 
+			if (closestSquare == nullptr ||
+				graph->getEnd()->getX() - graph->getStart()->getX() >= 0 && closestSquare_THREAD->getDistance() <= closestSquare->getDistance() ||
+				graph->getEnd()->getX() - graph->getStart()->getX() < 0 && closestSquare_THREAD->getDistance() < closestSquare->getDistance())
 			{
 				closestSquare = closestSquare_THREAD;
 			}

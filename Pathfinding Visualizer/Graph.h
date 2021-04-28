@@ -20,6 +20,9 @@ class Graph
 	// if true, graph cannot be modified
 	bool locked = false;
 
+	// if true, there is no path from start to end
+	bool successfulPath = false;
+
 public:
 	Graph();
 	Graph(int dimension);
@@ -30,6 +33,7 @@ public:
 	shared_ptr<Square> getStart();
 	shared_ptr<Square> getEnd();
 	bool isLocked();
+	bool hasSuccessfulPath();
 
 	// setters
 	void lock();
@@ -37,6 +41,7 @@ public:
 	void setEnd(int x, int y);
 	void setPath(int x, int y);
 	void setStart(int x, int y);
+	void setSuccessfulPath();
 	
 	// reset the graph to initial state
 	void reset();

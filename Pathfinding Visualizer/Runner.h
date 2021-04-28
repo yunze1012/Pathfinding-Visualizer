@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chrono>
+
 #include "Dijkstra.h"
 #include "Astar.h"
 #include "DFS.h"
@@ -18,10 +20,12 @@ enum class Option
 
 class Runner
 {
+	chrono::microseconds runtime; 
 	shared_ptr<Graph> graph;
 	shared_ptr<Algorithm> algorithm;
 
 public:
 	Runner(shared_ptr<Graph> graph);
+	chrono::microseconds getRuntime();
 	void run(Option option);
 };

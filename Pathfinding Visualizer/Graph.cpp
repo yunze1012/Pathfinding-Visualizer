@@ -57,6 +57,11 @@ shared_ptr<Square> Graph::getEnd()
 	return end;
 }
 
+bool Graph::hasSuccessfulPath()
+{
+	return successfulPath;
+}
+
 // setters:
 
 void Graph::setPath(int x, int y)
@@ -79,10 +84,14 @@ void Graph::setEnd(int x, int y)
 	this->end = graph[x][y];
 }
 
-
 void Graph::lock() 
 {
 	locked = true;
+}
+
+void Graph::setSuccessfulPath()
+{
+	successfulPath = true;
 }
 
 void Graph::reset() 
@@ -97,4 +106,5 @@ void Graph::reset()
 	start = nullptr;
 	end = nullptr;
 	locked = false;
+	successfulPath = false;
 }

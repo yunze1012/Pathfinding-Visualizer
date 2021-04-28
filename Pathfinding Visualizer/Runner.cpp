@@ -1,5 +1,4 @@
 #include "Runner.h"
-#include <chrono>
 
 Runner::Runner(shared_ptr<Graph> graph) : graph{ graph } {}
 
@@ -32,6 +31,10 @@ void Runner::run(Option option)
 	algorithm->run();
 
 	auto stop = chrono::high_resolution_clock::now();
-	auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-	cout << duration.count() << endl;
+	runtime = chrono::duration_cast<chrono::microseconds>(stop - start);
+}
+
+chrono::microseconds Runner::getRuntime()
+{
+	return runtime;
 }

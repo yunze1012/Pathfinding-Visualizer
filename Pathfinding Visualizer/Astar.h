@@ -6,7 +6,7 @@ class Astar : public Algorithm
 {
 protected:
 	// updates the unvisited neighbours of the given square with the necessary informations for the next iteration
-	virtual void updateUnvisitedNeighbors(shared_ptr<Square> s);
+	virtual void updateUnvisitedNeighbours(shared_ptr<Square> s);
 	shared_ptr<Square> getClosestSquare();
 
 public:

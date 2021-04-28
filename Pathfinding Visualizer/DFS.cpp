@@ -10,8 +10,13 @@ void DFS::run()
 	{
 		shared_ptr<Square> currentSquare = waitingList.top();
 		waitingList.pop();
+		// skip visited squares in the waiting list:
+		if (currentSquare->isVisited())
+		{
+			continue;
+		}
 		currentSquare->setVisited();
-		vector<shared_ptr<Square>> unvisitedNeighbours = getUnvisitedNeighbors(currentSquare);
+		vector<shared_ptr<Square>> unvisitedNeighbours = getUnvisitedNeighbours(currentSquare);
 		// for each neighbour, link them to the current square and push them in the waiting list so they can be checked next:
 		for (shared_ptr<Square> neighbour : unvisitedNeighbours)
 		{

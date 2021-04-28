@@ -1,5 +1,9 @@
 #include "Display.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 using namespace std;
 
 int main(int argc, char **argv)
@@ -11,5 +15,6 @@ int main(int argc, char **argv)
 
     d.start();
 
+    _CrtDumpMemoryLeaks();
     return 0;
 }

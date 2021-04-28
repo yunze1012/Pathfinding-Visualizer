@@ -88,6 +88,7 @@ vector<shared_ptr<Square>> Bidirectional::getUnvisitedNeighbors(shared_ptr<Squar
 
 void Bidirectional::print(shared_ptr<Square> intersectionSquare) 
 {
+	graph->setSuccessfulPath();
 	vector<shared_ptr<Square>> finalPathEnd;
 	vector<shared_ptr<Square>> finalPathStart;
 	auto currentSquare = intersectionSquare;

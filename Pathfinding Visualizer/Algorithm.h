@@ -16,7 +16,7 @@ protected:
 	shared_ptr<Graph> graph;
 
 	// returns a set of unvisited neighbours of the given square:
-	vector<shared_ptr<Square>> getUnvisitedNeighbors(shared_ptr<Square> s);
+	vector<shared_ptr<Square>> getUnvisitedNeighbours(shared_ptr<Square> s);
 
 	// prints the final path of the graph after running the algorithm:
 	void print();
@@ -26,4 +26,3 @@ public:
 	// runs the concrete algorithm on graph
 	virtual void run() = 0;
 };
-

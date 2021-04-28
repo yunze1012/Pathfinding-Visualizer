@@ -61,7 +61,6 @@ void Display::init()
     editEndOption->tgui::RadioButton::setText("Edit End");
     gui->add(editEndOption, "editEnd");
 
-
     // Edit wall option:
     tgui::RadioButton::Ptr editWallOption = tgui::RadioButton::create();
     editWallOption->setPosition(1000, 200);
@@ -70,14 +69,28 @@ void Display::init()
 
     // Algorithm selection scroll list:
     tgui::ComboBox::Ptr selectAlgorithmComboBox = tgui::ComboBox::create();
-    selectAlgorithmComboBox->setPosition(1000, 400);
-    selectAlgorithmComboBox->setSize(150, 30);
+    selectAlgorithmComboBox->setPosition(985, 400);
+    selectAlgorithmComboBox->setSize(180, 30);
     selectAlgorithmComboBox->addItem("Dijkstra", "dijkstra");
     selectAlgorithmComboBox->addItem("A*", "astar");
     selectAlgorithmComboBox->addItem("Depth-first search", "DFS");
     selectAlgorithmComboBox->addItem("Breadth-first search", "BFS");
     selectAlgorithmComboBox->addItem("Bidirectional search", "bidirectional");
     gui->add(selectAlgorithmComboBox, "selectAlgorithm");
+    selectAlgorithmComboBox->setSelectedItem("Dijkstra");
+
+    // Runtime display box:
+    tgui::Label::Ptr runtimeTitleLabel = tgui::Label::create();
+    runtimeTitleLabel->setText("Runtime:");
+    runtimeTitleLabel->setPosition(980, 475);
+    runtimeTitleLabel->setTextSize(15);
+    gui->add(runtimeTitleLabel, "runtimeTitle");
+
+    tgui::Label::Ptr runtimeLabel = tgui::Label::create();
+    runtimeLabel->setText("0 ms");
+    runtimeLabel->setPosition(980, 500);
+    runtimeLabel->setTextSize(15);
+    gui->add(runtimeLabel, "runtime");
 }
 
 void Display::reset()
@@ -126,6 +139,15 @@ void Display::run()
     {
         runner->run(Option::BIDIRECTIONAL);
     }
+
+    // display popup if there was no path found:
+    if (!graph->hasSuccessfulPath())
+    {
+        MessageBox(NULL, "There was no path found :(", "No Path", MB_OK);
+    }
+
+    // printing runtime:
+    gui->get<tgui::Label>("runtime")->setText(to_string(runner->getRuntime().count() / 1000) + " ms");
 }
 
 void Display::drawSquare(int x, int y, int size, sf::Color color)
