@@ -1,3 +1,3 @@
-## Release Version
+# Release Version
 
-# Simply download and run Pathfinding Visualizer.exe!
+### Simply download and run Pathfinding Visualizer.exe!
