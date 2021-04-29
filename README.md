@@ -1,5 +1,5 @@
 # Pathfinding Visualizer
-This is a program to help programmers visualize different pathfinding algorithms.
+This is a program to help programmers visualize different pathfinding algorithms using C++, SFML, and TGUI.
 
 ### Featured algorithms:
 
