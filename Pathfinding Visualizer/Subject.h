@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory>
 #include "Info.h"
 #include "Observer.h"
