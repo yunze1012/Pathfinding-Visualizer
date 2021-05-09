@@ -120,15 +120,16 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SMFL_STATIC;TGUI_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\A\source\repos\Pathfinding-Visualizer\Libraries\TGUI-0.9\include;C:\Users\A\source\repos\Pathfinding-Visualizer\Libraries\SFML-2.5.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yunzh\CppLibraries\SFML-2.5.1\include;C:\Users\yunzh\CppLibraries\TGUI-0.9\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;tgui.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\A\source\repos\Pathfinding-Visualizer\Libraries\TGUI-0.9\lib;C:\Users\A\source\repos\Pathfinding-Visualizer\Libraries\SFML-2.5.1\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;tgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\yunzh\CppLibraries\SFML-2.5.1\lib;C:\Users\yunzh\CppLibraries\TGUI-0.9\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,33 +138,48 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SMFL_STATIC;TGUI_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\yunzh\source\repos\Pathfinding Visualizer\Libraries\SFML-2.5.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yunzh\CppLibraries\SFML-2.5.1\include;C:\Users\yunzh\CppLibraries\TGUI-0.9\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;tgui.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\A\source\repos\Pathfinding-Visualizer\Libraries\TGUI-0.9\lib;C:\Users\A\source\repos\Pathfinding-Visualizer\Libraries\SFML-2.5.1\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;tgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\yunzh\CppLibraries\SFML-2.5.1\lib;C:\Users\yunzh\CppLibraries\TGUI-0.9\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Algorithm.h" />
     <ClInclude Include="Astar.h" />
+    <ClInclude Include="BFS.h" />
+    <ClInclude Include="Bidirectional.h" />
+    <ClInclude Include="DFS.h" />
     <ClInclude Include="Dijkstra.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="Info.h" />
+    <ClInclude Include="Observer.h" />
+    <ClInclude Include="Runner.h" />
     <ClInclude Include="Square.h" />
+    <ClInclude Include="Subject.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="Astar.cpp" />
+    <ClCompile Include="BFS.cpp" />
+    <ClCompile Include="Bidirectional.cpp" />
+    <ClCompile Include="DFS.cpp" />
     <ClCompile Include="Dijkstra.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Runner.cpp" />
     <ClCompile Include="Square.cpp" />
+    <ClCompile Include="Subject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
