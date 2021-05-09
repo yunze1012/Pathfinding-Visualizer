@@ -262,6 +262,9 @@ void Display::draw()
 
 void Display::render()
 {
+
+    window->setFramerateLimit(120);
+
     while (window->isOpen())
     {
         sf::Event event;
