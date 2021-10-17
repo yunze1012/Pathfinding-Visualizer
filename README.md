@@ -1,5 +1,5 @@
 # Pathfinding Visualizer
-This is a program to help programmers visualize different pathfinding algorithms using C++, SFML, and TGUI.
+This is a desktop application to help programmers visualize different pathfinding algorithms. Built using C++, SFML, and TGUI.
 
 ### Featured algorithms:
 
@@ -9,4 +9,8 @@ This is a program to help programmers visualize different pathfinding algorithms
 - BFS
 - Bidirectional
 
-Try it out in `./Release/Pathfinding Visualizer.exe`
+Try it out in `./build/Pathfinding Visualizer.exe`
+
+### Demo
+
+![Pathfinding Visualizer Demo](https://github.com/andyyu8588/Pathfinding-Visualizer/raw/master/docs/bidirectional.gif)
