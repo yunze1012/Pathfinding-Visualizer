@@ -1,10 +1,11 @@
 #include "Display.h"
+#include <stdexcept>
 
 Display::Display(shared_ptr<Graph> graph, shared_ptr<Runner> runner) 
     : graph(graph), runner(runner)
 {
     // creating window and canvas:
-    window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 900), "Pathfinder Visualizer", sf::Style::Titlebar | sf::Style::Close);
+    window = make_shared<sf::RenderWindow>(sf::VideoMode(1200 * factor, 900 * factor), "Pathfinder Visualizer", sf::Style::Titlebar | sf::Style::Close);
     gui = make_shared<tgui::GuiSFML>(*window);
     canvas = tgui::Canvas::create();
     gui->add(canvas);
@@ -27,50 +28,58 @@ void Display::init()
     // Line vector: start->end point.
     sf::Vertex line[2] =
     {
-        sf::Vertex(sf::Vector2f(950, 0), sf::Color(192, 192, 192)),
-        sf::Vertex(sf::Vector2f(950, 900), sf::Color(192, 192, 192))
+        sf::Vertex(sf::Vector2f(950 * factor, 0), sf::Color(192, 192, 192)),
+        sf::Vertex(sf::Vector2f(950 * factor, 900), sf::Color(192, 192, 192))
     };
     canvas->clear(sf::Color(255, 255, 255));
     canvas->draw(line, 2, sf::Lines);
 
     // Run algorithm button:
     tgui::Button::Ptr runButton = tgui::Button::create();
-    runButton->setPosition(1000, 800);
-    runButton->setSize(150, 50);
+    runButton->setPosition(1000 * factor, 800 * factor);
+    runButton->setSize(150 * factor, 50 * factor);
     runButton->setText("Run");
     runButton->onPress([&] { run(); });
     gui->add(runButton, "run");
 
     // Reset graph button:
     tgui::Button::Ptr resetButton = tgui::Button::create();
-    resetButton->setPosition(1000, 700);
-    resetButton->setSize(150, 50);
+    resetButton->setPosition(1000 * factor, 700 * factor);
+    resetButton->setSize(150 * factor, 50 * factor);
     resetButton->setText("Reset");
     resetButton->onPress([&] { reset(); });
     gui->add(resetButton, "reset");
 
+    // Low-rez button:
+    tgui::Button::Ptr lowRezButton = tgui::Button::create();
+    lowRezButton->setPosition(1000 * factor, 600 * factor);
+    lowRezButton->setSize(150 * factor, 50 * factor);
+    lowRezButton->setText("Low-Rez Mode");
+    lowRezButton->onPress([&] { lowRez(); });
+    gui->add(lowRezButton, "lowRez");
+
     // Edit start option:
     tgui::RadioButton::Ptr editStartOption = tgui::RadioButton::create();
-    editStartOption->setPosition(1000, 100);
+    editStartOption->setPosition(1000 * factor, 100 * factor);
     editStartOption->tgui::RadioButton::setText("Edit Start");
     gui->add(editStartOption, "editStart");
     
     // Edit end option:
     tgui::RadioButton::Ptr editEndOption = tgui::RadioButton::create();
-    editEndOption->setPosition(1000, 150);
+    editEndOption->setPosition(1000 * factor, 150 * factor);
     editEndOption->tgui::RadioButton::setText("Edit End");
     gui->add(editEndOption, "editEnd");
 
     // Edit wall option:
     tgui::RadioButton::Ptr editWallOption = tgui::RadioButton::create();
-    editWallOption->setPosition(1000, 200);
+    editWallOption->setPosition(1000 * factor, 200 * factor);
     editWallOption->tgui::RadioButton::setText("Edit Wall");
     gui->add(editWallOption, "editWall");
 
     // Algorithm selection scroll list:
     tgui::ComboBox::Ptr selectAlgorithmComboBox = tgui::ComboBox::create();
-    selectAlgorithmComboBox->setPosition(985, 400);
-    selectAlgorithmComboBox->setSize(180, 30);
+    selectAlgorithmComboBox->setPosition(985 * factor, 400 * factor);
+    selectAlgorithmComboBox->setSize(180 * factor, 30 * factor);
     selectAlgorithmComboBox->addItem("Dijkstra", "dijkstra");
     selectAlgorithmComboBox->addItem("A*", "astar");
     selectAlgorithmComboBox->addItem("Depth-first search", "DFS");
@@ -82,15 +91,26 @@ void Display::init()
     // Runtime display box:
     tgui::Label::Ptr runtimeTitleLabel = tgui::Label::create();
     runtimeTitleLabel->setText("Runtime:");
-    runtimeTitleLabel->setPosition(980, 475);
-    runtimeTitleLabel->setTextSize(15);
+    runtimeTitleLabel->setPosition(980 * factor, 475 * factor);
+    runtimeTitleLabel->setTextSize(15 * factor);
     gui->add(runtimeTitleLabel, "runtimeTitle");
 
     tgui::Label::Ptr runtimeLabel = tgui::Label::create();
     runtimeLabel->setText("0 ms");
-    runtimeLabel->setPosition(980, 500);
-    runtimeLabel->setTextSize(15);
+    runtimeLabel->setPosition(980 * factor, 500 * factor);
+    runtimeLabel->setTextSize(15 * factor);
     gui->add(runtimeLabel, "runtime");
+}
+
+void Display::lowRez() {
+    factor = 0.8;
+    squareDim *= factor;
+    std::cout << squareDim << std::endl;
+    window->setSize(sf::Vector2u(960, 720));
+    gui->removeAllWidgets();
+    canvas->clear(sf::Color::White);
+    gui->add(canvas);
+    start();
 }
 
 void Display::reset()
@@ -157,7 +177,7 @@ void Display::drawSquare(int x, int y, int size, sf::Color color)
     squareShape.setOutlineColor(sf::Color(192, 192, 192));
     squareShape.setOutlineThickness(1);
     squareShape.setFillColor(color);
-    squareShape.setPosition(squareDim * x + 35, squareDim * y + 15);
+    squareShape.setPosition(squareDim * x + (35 * factor), squareDim * y + (15 * factor));
     canvas->draw(squareShape);
 }
 
@@ -166,11 +186,11 @@ shared_ptr<Square> Display::getSquareOnMousePos()
     sf::Vector2i mousepos = sf::Mouse::getPosition(*window);
     int mouseX = mousepos.x;
     int mouseY = mousepos.y;
-    if (mouseX > 35 && mouseX < (squareDim * graph->getDimension()) + 35 &&
-        mouseY > 15 && mouseY < (squareDim * graph->getDimension()) + 15) 
+    if (mouseX > (35 * factor) && mouseX < (squareDim * graph->getDimension()) + (35 * factor) &&
+        mouseY > (15 * factor) && mouseY < (squareDim * graph->getDimension()) + (15 * factor))
     {
-        int squareX = (mouseX - 35) / squareDim;
-        int squareY = (mouseY - 15) / squareDim;
+        int squareX = (mouseX - (35 * factor)) / squareDim;
+        int squareY = (mouseY - (15 * factor)) / squareDim;
         return graph->getSquare(squareX, squareY);
     }
     // if mouse is not on a square:
@@ -247,7 +267,6 @@ void Display::draw()
     {
         for (int j = 0; j < graph->getDimension(); j++) 
         {
-            sf::RectangleShape square;
             if (j == graph->getDimension() - 1 || i == graph->getDimension() - 1) 
             {
                 drawSquare(j, i, squareDim - 1, sf::Color(255, 255, 255));
@@ -263,7 +282,7 @@ void Display::draw()
 void Display::render()
 {
 
-    window->setFramerateLimit(120);
+    window->setFramerateLimit(60);
 
     while (window->isOpen())
     {
@@ -279,7 +298,7 @@ void Display::render()
             // checking for the current edit map option before running algorithm:
             else if (!graph->isLocked() && event.type == sf::Event::MouseButtonPressed)
             {
-                if (gui->get<tgui::RadioButton>("editStart")->isChecked())
+                if (gui->get<tgui::RadioButton>("editStart")->isChecked()   )
                     editStart();
                 else if (gui->get<tgui::RadioButton>("editWall")->isChecked())
                     editWall();

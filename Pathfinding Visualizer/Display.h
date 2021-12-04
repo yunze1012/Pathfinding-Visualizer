@@ -20,6 +20,7 @@ class Display : public Observer
 	shared_ptr<sf::RenderWindow> window;
 	shared_ptr<tgui::GuiSFML> gui;
 	shared_ptr<tgui::Canvas> canvas;
+	float factor = 1;
 
 	// draws a new square with the given color and given size on the given position:
 	void drawSquare(int x, int y, int size, sf::Color color);
@@ -38,6 +39,9 @@ class Display : public Observer
 
 	// runs the display
 	void run();
+
+	// enables the low resolution mode
+	void lowRez();
 
 	// returns the square superposed with the current mouse position:
 	shared_ptr<Square> getSquareOnMousePos();
